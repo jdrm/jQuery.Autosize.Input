@@ -3,17 +3,17 @@ var Plugins;
     var AutosizeInput = (function () {
         function AutosizeInput(input, options) {
             var _this = this;
-            this._input = $(input);
-            this._options = options;
+            this.input = $(input);
+            this.options = options;
 
-            this._mirror = $('<span style="position:absolute; top:-999px; left:0; white-space:pre;"/>');
+            this.mirror = $('<span style="position:absolute; top:-999px; left:0; white-space:pre;"/>');
 
             $.each(['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'letterSpacing', 'textTransform', 'wordSpacing', 'textIndent'], function (i, val) {
-                _this._mirror[0].style[val] = _this._input.css(val);
+                _this.mirror[0].style[val] = _this.input.css(val);
             });
-            $("body").append(this._mirror);
+            $("body").append(this.mirror);
 
-            this._input.on("keydown keyup input propertychange change", function (e) {
+            this.input.on("keydown keyup input propertychange change", function (e) {
                 _this.update();
             });
 
@@ -21,58 +21,35 @@ var Plugins;
                 _this.update();
             })();
         }
-        Object.defineProperty(AutosizeInput.prototype, "options", {
-            get: function () {
-                return this._options;
-            },
-            enumerable: true,
-            configurable: true
-        });
 
-        Object.defineProperty(AutosizeInput, "instanceKey", {
-            get: function () {
-                return "autosizeInputInstance";
-            },
-            enumerable: true,
-            configurable: true
-        });
 
         AutosizeInput.prototype.update = function () {
-            var value = this._input.val();
+            var value = this.input.val();
 
             if (!value) {
-                value = this._input.attr("placeholder") || "";
+                value = this.input.attr("placeholder") || "";
             }
 
-            if (value === this._mirror.text()) {
+            if (value === this.mirror.text()) {
                 return;
             }
 
-            this._mirror.text(value);
+            this.mirror.text(value);
 
-            var newWidth = this._mirror.width() + this._options.space;
+            var newWidth = this.mirror.width() + this.options.space;
 
-            this._input.width(newWidth);
+            this.input.width(newWidth);
         };
         return AutosizeInput;
     })();
     Plugins.AutosizeInput = AutosizeInput;
+    Plugins.AutosizeInput.instanceKey = 'autosizeInputInstance';
 
     var AutosizeInputOptions = (function () {
         function AutosizeInputOptions(space) {
-            if (typeof space === "undefined") { space = 30; }
-            this._space = space;
+            if (typeof space === "undefined") { space = 4; }
+            this.space = space;
         }
-        Object.defineProperty(AutosizeInputOptions.prototype, "space", {
-            get: function () {
-                return this._space;
-            },
-            set: function (value) {
-                this._space = value;
-            },
-            enumerable: true,
-            configurable: true
-        });
         return AutosizeInputOptions;
     })();
     Plugins.AutosizeInputOptions = AutosizeInputOptions;
